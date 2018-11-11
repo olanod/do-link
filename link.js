@@ -1,3 +1,5 @@
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPLv3
+// Copyright © 2018 Daniel Olano
 const insertAfter = (ele, sib) =>
 	  ele.parentElement.insertBefore(sib, ele.nextSibling)
 const on = (ctx, events, handler) =>
@@ -68,3 +70,4 @@ async function fetchPage(url) {
 	pages.set(url, page)
 	return page
 }
+// @license-end
