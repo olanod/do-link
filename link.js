@@ -1,3 +1,4 @@
+/* Copyright © 2018  Daniel Olano | @license GPLv3 */
 const insertAfter = (ele, sib) =>
 	  ele.parentElement.insertBefore(sib, ele.nextSibling)
 const on = (ctx, events, handler) =>
