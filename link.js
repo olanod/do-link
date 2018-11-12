@@ -33,7 +33,7 @@ class Link extends HTMLAnchorElement {
 	async visit() {
 		try {
 			this.dispatchEvent(new CustomEvent('linkStarted', {bubbles: true}))
-			let target = $(this.for)
+			let target = $(this.into)
 			let n = await this._fetchNode()
 			if (prevPage === this._page) return
 			prevPage = this._page
@@ -50,8 +50,8 @@ class Link extends HTMLAnchorElement {
 		}
 	}
 
-	get for() { return this.dataset.for || 'main' }
-	get from() { return this.dataset.from || 'main' }
+	get into() { return this.getAttribute('into') || 'main' }
+	get from() { return this.getAttribute('from') || 'main' }
 
 	async _fetchNode() {
 		if (!this._page) {
