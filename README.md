@@ -43,6 +43,6 @@ If you want to change what element gets its content replaced and what element to
 If the `into` attribute is a dialog and the browser supports native dialog elements 
 the dialog will be opened and the first `form` will have its method set to `"dialog"`
 
-### History(TODO)
+### History
 Visited links update the address bar using the `history.pushState` API.
 

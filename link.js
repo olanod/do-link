@@ -1,68 +1,66 @@
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPLv3
 // Copyright © 2018 Daniel Olano
-const insertAfter = (ele, sib) =>
-	  ele.parentElement.insertBefore(sib, ele.nextSibling)
 const on = (ctx, events, handler) =>
-	  events.forEach(e => ctx.addEventListener(e, handler))
-const $ = document.querySelector.bind(document)
-const $e = (e, s) => e.querySelector(s)
-
-let prevPage = null
+	events.forEach(e => ctx.addEventListener(e, handler))
+const $ = (s, e = document) => e.querySelector(s)
+const ce = ([e]) => new CustomEvent(e, {bubbles: true})
+const pages = new Map([[location.href, document.cloneNode(true)]])
+let firstVisit = null
 
 /**
  * Link is a customized built-in anchor element that asynchronously
- * fetches the contents of the linked document and opens it in the current
- * page or in a dialog box enhancing the browsing experience.
+ * fetches the contents of the linked document and puts its content
+ * in the specified element.
  */
 class Link extends HTMLAnchorElement {
-	constructor() {
-		super()
-		this._page = null
-	}
-
-	async connectedCallback() {
-		on(this, ['pointerenter', 'focus'], () => this._fetchNode())
+	connectedCallback() {
+		on(this, ['pointerenter', 'focus'], () => this.fetch())
 		on(this, ['click'], e => {
 			e.preventDefault()
 			this.visit()
 		})
 	}
 
-	disconnectedCallback() {}
-
 	async visit() {
+		if (location.href === this.href) return
+		this.dispatchEvent(ce`linkStarted`)
 		try {
-			this.dispatchEvent(new CustomEvent('linkStarted', {bubbles: true}))
-			let target = $(this.into)
-			let n = await this._fetchNode()
-			if (prevPage === this._page) return
-			prevPage = this._page
-			while (target.firstChild) target.firstChild.remove()
-			target.append(...n.children)
-			if ('HTMLDialogElement' in window &&
-				target instanceof HTMLDialogElement) {
-				let f = $e(target, 'form')
-				if (f) f.method = 'dialog'
-				target.show()
-			}
+			let {from, into} = this, t = $(into)
+			if (!firstVisit) firstVisit = {from, into}
+			let p = await this.fetch()
+			update($(from, p), t)
+			history.pushState({from, into}, '', this.href)
 		} finally {
-			this.dispatchEvent(new CustomEvent('linkFinished', {bubbles: true}))
+			this.dispatchEvent(ce`linkFinished`)
 		}
 	}
+	
+	async fetch() { return fetchPage(this.href) }
 
 	get into() { return this.getAttribute('into') || 'main' }
 	get from() { return this.getAttribute('from') || 'main' }
-
-	async _fetchNode() {
-		if (!this._page)
-			this._page = await fetchPage(this.href)
-		let e = $e(this._page, this.from)
-		return e && e.cloneNode(true)
-	}
 }
 customElements.define('do-link', Link, {extends: 'a'})
 
-const pages = new Map()
+self.addEventListener('popstate', ({state: s}) => {
+	s = s || firstVisit
+	update($(s.from, pages.get(location.href)), $(s.into))
+})
+
+const isDialog = e => 'HTMLDialogElement' in self && e instanceof HTMLDialogElement
+
+function update(src, target) {
+	if (!src || !target) return
+	src = src.cloneNode(true)
+	while (target.firstChild) target.firstChild.remove()
+	target.append(...src.children)
+	if (isDialog(target)) {
+		let f = $('form', target)
+		if (f) f.method = 'dialog'
+		target.show()
+	}
+}
+
 async function fetchPage(url) {
 	if (pages.has(url)) return pages.get(url)
 	let page = await fetch(url).then(r => r.text())
