@@ -5,7 +5,7 @@ const insertAfter = (ele, sib) =>
 const on = (ctx, events, handler) =>
 	  events.forEach(e => ctx.addEventListener(e, handler))
 const $ = document.querySelector.bind(document)
-const _$ = (e, s) => e.querySelector(s)
+const $e = (e, s) => e.querySelector(s)
 
 let prevPage = null
 
@@ -41,7 +41,7 @@ class Link extends HTMLAnchorElement {
 			target.append(...n.children)
 			if ('HTMLDialogElement' in window &&
 				target instanceof HTMLDialogElement) {
-				let f = _$(target, 'form')
+				let f = $e(target, 'form')
 				if (f) f.method = 'dialog'
 				target.show()
 			}
@@ -54,10 +54,10 @@ class Link extends HTMLAnchorElement {
 	get from() { return this.getAttribute('from') || 'main' }
 
 	async _fetchNode() {
-		if (!this._page) {
+		if (!this._page)
 			this._page = await fetchPage(this.href)
-		}
-		return document.importNode(_$(this._page, this.from), true)
+		let e = $e(this._page, this.from)
+		return e && e.cloneNode(true)
 	}
 }
 customElements.define('do-link', Link, {extends: 'a'})
