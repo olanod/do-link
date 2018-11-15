@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Home</title>
-		<script type="module" src="link.js" async></script>
-	</head>
-	<body>
-		<nav>
-			<a is="do-link" href="./example/login.html" into="dialog">Login</a>
-			<a is="do-link" href="./example/page1.html">Page 1</a>
-			<a is="do-link" href="./example/page2.html">Page 2</a>
-			<a is="do-link" href="./example/page3.html">Page 3</a>
-		</nav>
-		<dialog></dialog>
-		<main>
-			<h1>Welcome</h1>
-			<p>This is the home page</p>
-		</main>
-	</body>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home</title>
+	<script type="module" src="link.js" async></script>
+</head>
+<body>
+	<nav>
+		<a is="do-link" href="/example/login.html" into="dialog">Login</a>
+		<a is="do-link" href="/example/page1.html">Page 1</a>
+		<a is="do-link" href="/example/page2.html">Page 2</a>
+		<a is="do-link" href="/example/page3.html">Page 3</a>
+	</nav>
+	<dialog></dialog>
+	<main>
+		<h1>Welcome</h1>
+		<p>This is an example page on how to use the <code>do-link</code> custom element.</p>
+		<p>
+			When Javascript is disabled you should be able to navigate to the example pages
+			as usual, and when both modules and custom built-in elements are supported the
+			links load pages asynchronously replacing the main content of the page(or opening a dialog)
+			while keeping the navigation history.
+		</p>
+		<p>Check the source for more details 😉</p>
+	</main>
+</body>
 </html>
-
