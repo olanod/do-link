@@ -12,7 +12,7 @@ let firstVisit = null
  * fetches the contents of the linked document and puts its content
  * in the specified element.
  */
-class Link extends HTMLAnchorElement {
+export class Link extends HTMLAnchorElement {
 	connectedCallback() {
 		on(this, ['pointerenter', 'focus'], () => this.fetch())
 		on(this, ['click'], e => {

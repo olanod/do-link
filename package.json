@@ -1,0 +1,26 @@
+{
+  "name": "do-link-element",
+  "version": "1.0.0",
+  "description": "Enhanced <a> links, transform your page into a SPA",
+  "main": "link.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olanod/do-link.git"
+  },
+  "keywords": [
+    "custom-element",
+    "web-component"
+  ],
+  "author": "Daniel Olano <danielolanoc@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/olanod/do-link/issues"
+  },
+  "homepage": "https://github.com/olanod/do-link#readme"
+}
